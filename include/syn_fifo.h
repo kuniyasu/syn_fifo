@@ -340,6 +340,7 @@ public:
 	typedef syn_fifo_get<DT,SIZE,WIDTH> get;
 	typedef syn_fifo_put<DT,SIZE,WIDTH> put;
 	typedef syn_channel<DT,SIZE,WIDTH>  channel;
+	typedef syn_channel_in<DT,SIZE,WIDTH>  channel_in;
 };
 
 template<class DT> class syn_fifo_3{
@@ -353,6 +354,7 @@ public:
 	typedef syn_fifo_get<DT,SIZE,WIDTH> get;
 	typedef syn_fifo_put<DT,SIZE,WIDTH> put;
 	typedef syn_channel<DT,SIZE,WIDTH>  channel;
+	typedef syn_channel_in<DT,SIZE,WIDTH>  channel_in;
 };
 
 template<class DT> class syn_fifo_4{
@@ -366,6 +368,8 @@ public:
 	typedef syn_fifo_get<DT,SIZE,WIDTH> get;
 	typedef syn_fifo_put<DT,SIZE,WIDTH> put;
 	typedef syn_channel<DT,SIZE,WIDTH>  channel;
+	typedef syn_channel_in<DT,SIZE,WIDTH>  channel_in;
+
 };
 
 template<class DT> class syn_fifo_5{
@@ -379,6 +383,8 @@ public:
 	typedef syn_fifo_get<DT,SIZE,WIDTH> get;
 	typedef syn_fifo_put<DT,SIZE,WIDTH> put;
 	typedef syn_channel<DT,SIZE,WIDTH>  channel;
+	typedef syn_channel_in<DT,SIZE,WIDTH>  channel_in;
+
 };
 
 template<class DT> class syn_fifo_6{
@@ -392,6 +398,8 @@ public:
 	typedef syn_fifo_get<DT,SIZE,WIDTH> get;
 	typedef syn_fifo_put<DT,SIZE,WIDTH> put;
 	typedef syn_channel<DT,SIZE,WIDTH>  channel;
+	typedef syn_channel_in<DT,SIZE,WIDTH>  channel_in;
+
 };
 
 template<class DT> class syn_fifo_7{
@@ -405,6 +413,7 @@ public:
 	typedef syn_fifo_get<DT,SIZE,WIDTH> get;
 	typedef syn_fifo_put<DT,SIZE,WIDTH> put;
 	typedef syn_channel<DT,SIZE,WIDTH>  channel;
+	typedef syn_channel_in<DT,SIZE,WIDTH>  channel_in;
 };
 
 template<class DT> class syn_fifo_8{
@@ -418,5 +427,37 @@ public:
 	typedef syn_fifo_get<DT,SIZE,WIDTH> get;
 	typedef syn_fifo_put<DT,SIZE,WIDTH> put;
 	typedef syn_channel<DT,SIZE,WIDTH>  channel;
+	typedef syn_channel_in<DT,SIZE,WIDTH>  channel_in;
+
+};
+
+template<class DT> class syn_fifo_16{
+public:
+	static const unsigned int SIZE  = 16U;
+	static const unsigned int WIDTH = 4U;
+	typedef sc_uint<WIDTH> cnt_type;
+
+	typedef syn_fifo_base_get<DT,SIZE,WIDTH> base_get;
+	typedef syn_fifo_base_put<DT,SIZE,WIDTH> base_put;
+	typedef syn_fifo_get<DT,SIZE,WIDTH> get;
+	typedef syn_fifo_put<DT,SIZE,WIDTH> put;
+	typedef syn_channel<DT,SIZE,WIDTH>  channel;
+	typedef syn_channel_in<DT,SIZE,WIDTH>  channel_in;
+
+};
+
+template<class DT> class syn_fifo_32{
+public:
+	static const unsigned int SIZE  = 32U;
+	static const unsigned int WIDTH = 5U;
+	typedef sc_uint<WIDTH> cnt_type;
+
+	typedef syn_fifo_base_get<DT,SIZE,WIDTH> base_get;
+	typedef syn_fifo_base_put<DT,SIZE,WIDTH> base_put;
+	typedef syn_fifo_get<DT,SIZE,WIDTH> get;
+	typedef syn_fifo_put<DT,SIZE,WIDTH> put;
+	typedef syn_channel<DT,SIZE,WIDTH>  channel;
+	typedef syn_channel_in<DT,SIZE,WIDTH>  channel_in;
+
 };
 #endif /* SYN_FIFO_H_ */

@@ -11,7 +11,7 @@ TOP* top;
 
 int sc_main(int argc, char* argv[]){
 	top = new TOP("top");
-
+	sc_start();
 	return 0;
 }
 
