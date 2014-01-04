@@ -95,7 +95,8 @@ public:
 };
 
 
-template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_fifo_put:public syn_fifo_base_put<DT,SIZE,WIDTH>, public fifo_put_if<DT>{
+template<class DT,unsigned int SIZE, unsigned int WIDTH>
+class syn_fifo_put:public syn_fifo_base_put<DT,SIZE,WIDTH>, public fifo_put_if<DT>{
 public:
 	typedef sc_uint<WIDTH> cnt_type;
 	typedef syn_fifo_base_put<DT,SIZE,WIDTH> base_type;
@@ -108,7 +109,7 @@ public:
 		base_type::w_cnt(p.w_cnt);
 		base_type::r_cnt(p.r_cnt);
 
-		for(unsigned int c=0; c<SIZE; c++){
+		for(unsigned int c=0U; c<SIZE; c++){
 			base_type::data[c](p.data[c]);
 		}
 	}
@@ -119,7 +120,7 @@ public:
 		base_type::w_flag.write(false);
 		base_type::w_cnt.write(0U);
 
-		for(unsigned int c=0; c<SIZE; c++){
+		for(unsigned int c=0U; c<SIZE; c++){
 			base_type::data[c].write(0U);
 		}
 	}
@@ -150,7 +151,7 @@ public:
 
 	void wcnt_inc(){
 		if( w_cnt_in == SIZE-1U ){
-			w_cnt_in = 0;
+			w_cnt_in = 0U;
 			w_flag_in = !w_flag_in;
 		}else{
 			w_cnt_in = w_cnt_in + 1U;
@@ -188,7 +189,8 @@ private:
 	cnt_type w_cnt_in;
 };
 
-template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_fifo_get:public syn_fifo_base_get<DT,SIZE,WIDTH>, public fifo_get_if<DT>{
+template<class DT,unsigned int SIZE, unsigned int WIDTH>
+class syn_fifo_get:public syn_fifo_base_get<DT,SIZE,WIDTH>, public fifo_get_if<DT>{
 public:
 	typedef sc_uint<WIDTH> cnt_type;
 	typedef syn_fifo_base_get<DT,SIZE,WIDTH> base_type;
@@ -202,7 +204,7 @@ public:
 		base_type::w_cnt(p.w_cnt);
 		base_type::r_cnt(p.r_cnt);
 
-		for(unsigned int c=0; c<SIZE; c++){
+		for(unsigned int c=0U; c<SIZE; c++){
 			base_type::data[c](p.data[c]);
 		}
 	}
@@ -215,11 +217,26 @@ public:
 	}
 
 	virtual bool is_not_empty(){
-		return false;
+		bool cond_flag = false;
+		if( (r_flag_in == base_type::w_flag.read())&&(r_cnt_in == base_type::w_cnt.read())){
+			cond_flag = false;
+		}else{
+			cond_flag = true;
+		}
+
+		return cond_flag;
 	}
 
 	virtual bool is_full(){
-		return false;
+		bool cond_flag = false;
+
+		if( (r_flag_in != base_type::w_flag.read())&&(r_cnt_in == base_type::w_cnt.read())){
+			cond_flag = true;
+		}else{
+			cond_flag = false;
+		}
+
+		return cond_flag;
 	}
 
 	void rcnt_inc(){
@@ -235,10 +252,25 @@ public:
 	}
 
 	virtual bool nb_get(DT& dt){
-		return false;
+		bool cond_flag = false;
+
+		cond_flag = is_not_empty();
+
+		if( cond_flag == true ){
+			dt = base_type::data[r_cnt_in].read();
+			rcnt_inc();
+		}
+
+		return cond_flag;
 	}
 
-	virtual void  b_get(DT& dt){}
+	virtual void  b_get(DT& dt){
+
+		while( is_not_empty() == false ) wait();
+		dt = base_type::data[r_cnt_in].read();
+		rcnt_inc();
+
+	}
 
 private:
 	bool 	 r_flag_in;
@@ -269,6 +301,25 @@ public:
 	typedef syn_channel<DT,SIZE,WIDTH> base_type;
 
 	syn_channel_in(const char* name=sc_gen_unique_name("syn_channel_in")):base_type(name),r_flag_in(false),r_cnt_in(0),w_flag_in(false),w_cnt_in(0){}
+
+	virtual void w_reset(){
+		w_flag_in = false;
+		w_cnt_in = 0U;
+		base_type::w_flag.write(false);
+		base_type::w_cnt.write(0U);
+
+		for(unsigned int c=0U; c<SIZE; c++){
+			base_type::data[c].write(0U);
+		}
+	}
+
+
+	virtual void r_reset(){
+		r_flag_in = false;
+		r_cnt_in = 0U;
+		base_type::r_flag.write(false);
+		base_type::r_cnt.write(0U);
+	}
 
 private:
 	bool 	 r_flag_in;
