@@ -196,7 +196,6 @@ public:
 	typedef syn_fifo_base_get<DT,SIZE,WIDTH> base_type;
 
 	syn_fifo_get(const char* name=sc_gen_unique_name("syn_fifo_get")):base_type(name),r_flag_in(false),r_cnt_in(0){}
-	~syn_fifo_get(){}
 
 	template<class P> void bind(P& p){
 		base_type::w_flag(p.w_flag);
@@ -313,12 +312,143 @@ public:
 		}
 	}
 
+	virtual bool is_not_full(){
+		bool cond_flag = false;
+
+		if((w_flag_in == base_type::r_flag.read())||(w_cnt_in != base_type::r_cnt.read())){
+			cond_flag = true;
+		}else{
+			cond_flag = false;
+		}
+
+		return cond_flag;
+	}
+
+	virtual bool is_empry(bool op=false){
+		bool cond_flag = false;
+
+		if( op == true ){
+			if((w_flag_in == base_type::r_flag.read())&&(w_cnt_in == base_type::r_cnt.read())){
+				cond_flag = true;
+			}else{
+				cond_flag = false;
+			}
+		}else{
+			if((base_type::w_flag.read() == base_type::r_flag.read())&&(base_type::w_cnt.read() == base_type::r_cnt.read())){
+				cond_flag = true;
+			}else{
+				cond_flag = false;
+			}
+		}
+
+		return cond_flag;
+	}
+
+	void wcnt_inc(){
+		if( w_cnt_in == SIZE-1U ){
+			w_cnt_in = 0U;
+			w_flag_in = !w_flag_in;
+		}else{
+			w_cnt_in = w_cnt_in + 1U;
+		}
+
+		base_type::w_cnt.write(w_cnt_in);
+		base_type::w_flag.write(w_flag_in);
+	}
+
+	virtual bool nb_put(const DT& dt){
+		bool cond_flag = false;
+
+		{
+			cond_flag = is_not_full();
+
+			if( cond_flag == true ){
+				base_type::data[w_cnt_in] = dt;
+				wcnt_inc();
+			}
+		}
+
+		return cond_flag;
+	}
+
+	virtual void  b_put(const DT& dt){
+		{
+			while( !is_not_full() == false) wait();
+			base_type::data[w_cnt_in] = dt;
+			wcnt_inc();
+		}
+	}
+
 
 	virtual void r_reset(){
 		r_flag_in = false;
 		r_cnt_in = 0U;
 		base_type::r_flag.write(false);
 		base_type::r_cnt.write(0U);
+	}
+
+	virtual bool is_not_empty(){
+		bool cond_flag = false;
+		if( (r_flag_in == base_type::w_flag.read())&&(r_cnt_in == base_type::w_cnt.read())){
+			cond_flag = false;
+		}else{
+			cond_flag = true;
+		}
+
+		return cond_flag;
+	}
+
+	virtual bool is_full(bool op=false){
+		bool cond_flag = false;
+
+		if( op == true ){
+			if((r_flag_in != base_type::w_flag.read())&&(r_cnt_in == base_type::w_cnt.read())){
+				cond_flag = true;
+			}else{
+				cond_flag = false;
+			}
+		}else{
+			if((base_type::r_flag.read() != base_type::w_flag.read())&&(base_type::r_cnt.read() == base_type::w_cnt.read())){
+				cond_flag = true;
+			}else{
+				cond_flag = false;
+			}
+		}
+
+		return cond_flag;
+	}
+
+	void rcnt_inc(){
+		if( r_cnt_in == SIZE-1U ){
+			r_cnt_in = 0;
+			r_flag_in = !r_flag_in;
+		}else{
+			r_cnt_in = r_cnt_in + 1U;
+		}
+
+		base_type::r_cnt.write(r_cnt_in);
+		base_type::r_flag.write(r_flag_in);
+	}
+
+	virtual bool nb_get(DT& dt){
+		bool cond_flag = false;
+
+		cond_flag = is_not_empty();
+
+		if( cond_flag == true ){
+			dt = base_type::data[r_cnt_in].read();
+			rcnt_inc();
+		}
+
+		return cond_flag;
+	}
+
+	virtual void  b_get(DT& dt){
+
+		while( is_not_empty() == false ) wait();
+		dt = base_type::data[r_cnt_in].read();
+		rcnt_inc();
+
 	}
 
 private:
