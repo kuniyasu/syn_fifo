@@ -2,7 +2,7 @@
  * syn_fifo.h
  *
  *  Created on: 2014/01/04
- *      Author: Kuniyasu
+ *      Author: Kuniyasu Asano
  */
 
 #ifndef SYN_FIFO_H_
