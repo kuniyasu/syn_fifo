@@ -178,7 +178,7 @@ public:
 
 	virtual void  b_put(const DT& dt){
 		{
-			while( !is_not_full() == false) wait();
+			while( is_not_full() == false) wait();
 			base_type::data[w_cnt_in] = dt;
 			wcnt_inc();
 		}
