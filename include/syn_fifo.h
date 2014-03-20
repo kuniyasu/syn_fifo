@@ -253,10 +253,12 @@ public:
 	virtual bool nb_get(DT& dt){
 		bool cond_flag = false;
 
+
+		dt = base_type::data[r_cnt_in].read();
+
 		cond_flag = is_not_empty();
 
 		if( cond_flag == true ){
-			dt = base_type::data[r_cnt_in].read();
 			rcnt_inc();
 		}
 
@@ -432,11 +434,10 @@ public:
 
 	virtual bool nb_get(DT& dt){
 		bool cond_flag = false;
-
+		dt = base_type::data[r_cnt_in].read();
 		cond_flag = is_not_empty();
 
 		if( cond_flag == true ){
-			dt = base_type::data[r_cnt_in].read();
 			rcnt_inc();
 		}
 
