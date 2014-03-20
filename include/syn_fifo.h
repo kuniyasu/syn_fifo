@@ -150,11 +150,11 @@ public:
 	}
 
 	void wcnt_inc(){
-		if( w_cnt_in == SIZE-1U ){
+		if( (w_cnt_in + 1U) == SIZE ){
 			w_cnt_in = 0U;
 			w_flag_in = !w_flag_in;
 		}else{
-			w_cnt_in = w_cnt_in + 1U;
+			w_cnt_in = (w_cnt_in + 1U);
 		}
 
 		base_type::w_cnt.write(w_cnt_in);
@@ -239,11 +239,11 @@ public:
 	}
 
 	void rcnt_inc(){
-		if( r_cnt_in == SIZE-1U ){
+		if( (r_cnt_in + 1U) == SIZE ){
 			r_cnt_in = 0;
 			r_flag_in = !r_flag_in;
 		}else{
-			r_cnt_in = r_cnt_in + 1U;
+			r_cnt_in = (r_cnt_in + 1U);
 		}
 
 		base_type::r_cnt.write(r_cnt_in);
@@ -347,11 +347,11 @@ public:
 	}
 
 	void wcnt_inc(){
-		if( w_cnt_in == SIZE-1U ){
+		if( (w_cnt_in + 1U) == SIZE ){
 			w_cnt_in = 0U;
 			w_flag_in = !w_flag_in;
 		}else{
-			w_cnt_in = w_cnt_in + 1U;
+			w_cnt_in = (w_cnt_in + 1U);
 		}
 
 		base_type::w_cnt.write(w_cnt_in);
@@ -421,11 +421,11 @@ public:
 	}
 
 	void rcnt_inc(){
-		if( r_cnt_in == SIZE-1U ){
+		if( (r_cnt_in + 1U) == SIZE ){
 			r_cnt_in = 0;
 			r_flag_in = !r_flag_in;
 		}else{
-			r_cnt_in = r_cnt_in + 1U;
+			r_cnt_in = (r_cnt_in + 1U);
 		}
 
 		base_type::r_cnt.write(r_cnt_in);

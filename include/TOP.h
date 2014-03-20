@@ -37,7 +37,7 @@ public:
 			for(int i=0; i<10; i++){
 				cout << "PUT data" << i << endl;
 				put_if.b_put(i);
-				wait();
+				//wait();
 			}
 			wait();
 		}
@@ -69,7 +69,7 @@ public:
 			for(int i=0; i<10; i++){
 				get_if.b_get(data);
 				cout << "GET data" << data << endl;
-				wait();
+				//wait();
 			}
 
 			wait();
@@ -89,8 +89,13 @@ public:
 
 	SC_HAS_PROCESS(TOP);
 
-	TOP(const sc_module_name name):sc_module(name),clk("CLK", 25, SC_NS, 0.5, 5, SC_NS, true ),nrst("nrst")
-	,producer("producer"),consumer("consumer"),chain("chain"){
+	TOP(const sc_module_name name):sc_module(name)
+	,clk("CLK", 25, SC_NS, 0.5, 5, SC_NS, true )
+	,nrst("nrst")
+	,producer("producer")
+	,consumer("consumer")
+	,chain("chain")
+	{
 
 		producer.clk(clk);
 		producer.nrst(nrst);
