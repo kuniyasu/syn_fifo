@@ -5,23 +5,16 @@
  *      Author: Kuniyasu Asano
  */
 
-#ifndef SYN_FIFO_H_
-#define SYN_FIFO_H_
 
-#include <systemc.h>
+#ifndef FIFO_IF_H
+#define FIFO_IF_H
 
+#include<systemc.h>
 #define TR_NAME(_name) (std::string(name())+"_"+std::string(_name)).c_str()
 #define PIN_NAME(bname,_name_) (std::string(bname)+"_"+std::string(_name_)).c_str()
 
 template<class DT>class fifo_get_if;
 template<class DT>class fifo_put_if;
-
-template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_fifo_base_put;
-template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_fifo_base_get;
-template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_fifo_put;
-template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_fifo_get;
-template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_channel;
-template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_channel_in;
 
 template<class DT>class fifo_get_if:public sc_interface{
 public:
@@ -39,6 +32,20 @@ public:
 	virtual void  b_put(const DT& dt) = 0;
 };
 
+#endif
+
+
+#ifndef SYN_FIFO_H_
+#define SYN_FIFO_H_
+
+#include <systemc.h>
+
+template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_fifo_base_put;
+template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_fifo_base_get;
+template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_fifo_put;
+template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_fifo_get;
+template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_channel;
+template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_channel_in;
 
 template<class DT,unsigned int SIZE, unsigned int WIDTH>class syn_fifo_base_put{
 public:
